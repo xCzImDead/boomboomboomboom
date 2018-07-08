@@ -27,6 +27,8 @@ client.user.setGame(`=help | =invite`,"http://twitch.tv/S-F")
   console.log('')
   console.log('')
 });
+
+
 client.on('message', message => {
               if(!message.channel.guild) return;
     var prefix = "=";
@@ -69,6 +71,8 @@ client.on('message', message => {
     })
     }
     });
+
+
 client.on("message", message => {
     var prefix = "="; // غير هنا حط البرفكس
  
@@ -91,6 +95,8 @@ client.on("message", message => {
 
 
 });
+
+
 client.on('message', function(msg) {
     const prefix = '='
     if(msg.content.startsWith (prefix  + 'server')) {
@@ -110,6 +116,8 @@ client.on('message', function(msg) {
       msg.channel.send({embed:embed});
     }
   });
+
+
         message.guild.member(mutePerson).addRole(muteRole);
         let muteEmbed = new Discord.RichEmbed()
         .setAuthor(`${mutePerson.username}#${mutePerson.discriminator}`,mutePerson.avatarURL)
@@ -127,6 +135,8 @@ client.on('message', function(msg) {
     });
     }
 })
+
+
 client.on("message", message => {
   if (message.author.bot) return;
  
@@ -159,6 +169,8 @@ client.on("message", message => {
 };
  
 });
+
+
 client.on('message', message => {
                 if(message.content === prefix + "invite") {
                     let embed = new Discord.RichEmbed ()
@@ -168,6 +180,8 @@ client.on('message', message => {
                    message.channel.sendEmbed(embed);
                   }
 });
+
+
 client.on('message', message => {
     if (message.author.bot) return;
      if (message.content === "=help"){
@@ -213,12 +227,15 @@ message.author.sendEmbed(embed)
 }
 });
 
+
 client.on('message', msg => {
       if(!msg.channel.guild) return;
     if(msg.content.startsWith (prefix  + 'help')) {
     msg.reply('**:runner: شيك علي الخاص**');
   }
 });
+
+
 client.on('message', message => {
     if(message.content === "=bot") {
         const embed = new Discord.RichEmbed()
@@ -231,6 +248,8 @@ client.on('message', message => {
         message.channel.sendEmbed(embed);
            }
 });
+
+
 client.on('message', message => {
                                 if(!message.channel.guild) return;
                         if (message.content.startsWith('=ping')) {
@@ -246,4 +265,6 @@ client.on('message', message => {
                         message.channel.send({embed:embed});
                         }
                     });
+
+
 client.login(process.env.BOT_TOKEN);
