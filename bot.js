@@ -69,33 +69,6 @@ client.on('message', message => {
     })
     }
     });
-client.on('message', message => {
-  if (message.author.codes) return;
-  if (!message.content.startsWith(prefix)) return;
-
-  let command = message.content.split(" ")[0];
-  command = command.slice(prefix.length);
-
-  let args = message.content.split(" ").slice(1);
-
-  if (command == "ban") {
-               if(!message.channel.guild) return message.reply('** This command only for servers**');
-         
-  if(!message.guild.member(message.author).hasPermission("BAN_MEMBERS")) return message.reply("**انت لا تملك الصلاحيات المطلوبه**");
-  if(!message.guild.member(client.user).hasPermission("BAN_MEMBERS")) return message.reply("**I Don't Have ` BAN_MEMBERS ` Permission**");
-  let user = message.mentions.users.first();
-  
-  if (message.mentions.users.size < 1) return message.reply("**منشن شخص**");
-  if (!message.guild.member(user)
-  .bannable) return message.reply("**يجب ان تكون رتبة البوت اعلي من رتبه الشخص المراد تبنيدة**");
-
-
-  message.guild.member(user).ban(7, user);
-
-message.channel.send(`** ${user.tag} banned from the server **  `)
-
-}
-});
 client.on("message", message => {
     var prefix = "="; // غير هنا حط البرفكس
  
@@ -137,28 +110,6 @@ client.on('message', function(msg) {
       msg.channel.send({embed:embed});
     }
   });
-client.on('message', async message => {
-    let muteReason = message.content.split(" ").slice(3).join(" ");
-    let mutePerson = message.mentions.users.first();
-    let messageArray = message.content.split(" ");
-    let muteRole = message.guild.roles.find(r => r.name === 'Muted');
-    let time = messageArray[2];
-    if(message.content.startsWith(prefix + "mute")) {
-        if(!message.guild.member(message.author).hasPermission("MANAGE_ROLES")) return message.channel.send('**- You don\'t have the needed permissions!**');
-        if(!mutePerson) return message.channel.send("**- Mention someone!**");
-        if(mutePerson === message.author) return message.channel.send('**- You cannot mute yourself!**');
-        if(mutePerson === client.user) return message.channel.send('**- You cannot mute me!**');
-        if(message.guild.member(mutePerson).roles.has(muteRole.id)) return message.channel.send('**- This person is already muted!**');
-        if(!muteRole) return message.guild.createRole({ name: "Muted", permissions: [] });
-        if(!time) return message.channel.send("**- Supply a time!**");
-        if(!time.match(/[1-7][s,m,h,d,w]/g)) return message.channel.send('**- Supply a real time!**');
-        if(!muteReason) return message.channel.send("**- Supply a reason!**");
-        message.guild.channels.forEach(async (channel, id) => {
-      message.channel.overwritePermissions(muteRole, {
-        SEND_MESSAGES: false,
-        ADD_REACTIONS: false
-      });
-    });
         message.guild.member(mutePerson).addRole(muteRole);
         let muteEmbed = new Discord.RichEmbed()
         .setAuthor(`${mutePerson.username}#${mutePerson.discriminator}`,mutePerson.avatarURL)
@@ -208,44 +159,6 @@ client.on("message", message => {
 };
  
 });
-const codes = {
-    ' ': '   ',
-    '0': '0⃣',
-    '1': '1⃣',
-    '2': '2⃣',
-    '3': '3⃣',
-    '4': '4⃣',
-    '5': '5⃣',
-    '6': '6⃣',
-    '7': '7⃣',
-    '8': '8⃣',
-    '9': '9⃣',
-    '!': '❕',
-    '?': '❔',
-    '#': '#⃣',
-    '*': '*⃣'
-  };
-  
-  'abcdefghijklmnopqrstuvwxyz'.split('').forEach(c => {
-    codes[c] = codes[c.toUpperCase()] = ` :regional_indicator_${c}:`;
-  });
-  
-  
-  client.on('message' , async message => {
-         if(message.content.startsWith(prefix + "e")) {
-            let args = message.content.split(" ").slice(1);
-    if (args.length < 1) {
-      message.channel.send('You must provide some text to emojify!');
-  }
-  
-  message.channel.send(
-      args.join(' ')
-          .split('')
-          .map(c => codes[c] || c)
-          .join('')
-  );
-  };
-  });
 client.on('message', message => {
                 if(message.content === prefix + "invite") {
                     let embed = new Discord.RichEmbed ()
@@ -333,22 +246,28 @@ client.on('message', message => {
                         message.channel.send({embed:embed});
                         }
                     });
-client.on('message', message => {
-            if(!message.channel.guild) return;
-let args = message.content.split(' ').slice(1).join(' ');
-var prefix = "=";
-if (message.content.startsWith(prefix + 'bcall')){
-message.channel.sendMessage('جار ارسال الرسالة |✅')
-client.users.forEach(m =>{
-    var bc = new
-Discord.RichEmbed()
-       .setColor('RANDOM')
-       .setTitle('Broadcast')
-       .addField('Server', message.guild.name)
-       .addField('Sender', message.author.username)
-       .addField('Message', args)
-    m.send({ embed: bc })
-})
-}
-});
 client.login(process.env.BOT_TOKEN);
+client.on('message',async message => {
+  let args = message.content.split(" ").slice(1).join(" ");
+  let role = message.guild.roles.find('name',args) || message.guild.roles.get(args);
+
+
+  if(message.content.startsWith(prefix + "prole")) {
+    if(!args) return message.reply('اكتب اسم الرتبة');
+    if(!role) return message.reply('هذه الرتبة غير موجودة');
+    let iQp = new Discord.RichEmbed()
+    .setAuthor(message.author.tag,message.author.avatarURL)
+    .setTitle(message.guild.name)
+    .setThumbnail(message.guild.iconURL)
+    .addField('- اسم الرتبة',role.name,true)
+    .addField('- اي دي الرتبة',role.id,true)
+    .addField('- تم انشاء الرتبة',role.createdAt.toLocaleString(),true)
+    .addField('- لون الرتبة',role.hexColor,true)
+    .addField('- عدد الاعضاء الذي لديهم نفس الرتبة',role.members.size,true)
+    .addField('- مركز الرتبة بين كل الرتب',role.position,true)
+    .addField('- خصائص الرتبة',role.permissions,true)
+    .setFooter(message.author.tag,message.author.avatarURL);
+
+    message.channel.send(iQp);
+  }
+});
